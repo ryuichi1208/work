@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
         int byteRcvd  = 0;
         int byteIndex = 0;
         while (byteIndex < MSGSIZE) {
+            //返ってきたメッセージをバッファーへ読み出し
             byteRcvd = recv(sock, &recvBuffer[byteIndex], 1, 0);
             if (byteRcvd > 0) {
                 if (recvBuffer[byteIndex] == '\n'){
