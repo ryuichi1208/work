@@ -11,40 +11,45 @@
 
 int main(int argc, char* argv[]) {
 
-    int servSock; //server socket descripter
-    int clitSock; //client socket descripter
-    struct sockaddr_in servSockAddr; //server internet socket address
-    struct sockaddr_in clitSockAddr; //client internet socket address
-    unsigned short servPort; //server port number
-    unsigned int clitLen; // client internet socket address length
-    char recvBuffer[BUFSIZE];//receive temporary buffer
-    int recvMsgSize, sendMsgSize; // recieve and send buffer size
+    int servSock;
+    int clitSock;
+    struct sockaddr_in servSockAddr;
+    struct sockaddr_in clitSockAddr;
+    unsigned short servPort;
+    unsigned int clitLen;
+    char recvBuffer[BUFSIZE];
+    int recvMsgSize, sendMsgSize;
 
     if ( argc != 2) {
         fprintf(stderr, "argument count mismatch error.\n");
         exit(EXIT_FAILURE);
     }
 
+    //ポート番号の整合性確認
     if ((servPort = (unsigned short) atoi(argv[1])) == 0) {
         fprintf(stderr, "invalid port number.\n");
         exit(EXIT_FAILURE);
     }
 
+    //ソケット作成
     if ((servSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0 ){
         perror("socket() failed.");
         exit(EXIT_FAILURE);
     }
 
+    //構造体初期化
     memset(&servSockAddr, 0, sizeof(servSockAddr));
     servSockAddr.sin_family      = AF_INET;
     servSockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servSockAddr.sin_port        = htons(servPort);
 
+    //ソケットに対しポート番号とIPアドレスをバインド
     if (bind(servSock, (struct sockaddr *) &servSockAddr, sizeof(servSockAddr) ) < 0 ) {
         perror("bind() failed.");
         exit(EXIT_FAILURE);
     }
 
+    //クライアントからの通信待受
     if (listen(servSock, QUEUELIMIT) < 0) {
         perror("listen() failed.");
         exit(EXIT_FAILURE);
@@ -59,6 +64,7 @@ int main(int argc, char* argv[]) {
         printf("connected from %s.\n", inet_ntoa(clitSockAddr.sin_addr));
 
         while(1) {
+            //メッセージ受信
             if ((recvMsgSize = recv(clitSock, recvBuffer, BUFSIZE, 0)) < 0) {
                 perror("recv() failed.");
                 exit(EXIT_FAILURE);
@@ -66,7 +72,8 @@ int main(int argc, char* argv[]) {
                 fprintf(stderr, "connection closed by foreign host.\n");
                 break;
             }
-
+            
+            //受信したメッセージをそのままエコー
             if((sendMsgSize = send(clitSock, recvBuffer, recvMsgSize, 0)) < 0){
                 perror("send() failed.");
                 exit(EXIT_FAILURE);
