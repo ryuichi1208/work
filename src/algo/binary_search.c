@@ -12,8 +12,8 @@ typedef struct _n {
 /* 探索先の配列 */
 int arry[] = {3, 6, 2, 7, 1, 4, 8};
 
-/* 配列の値を表示 */
-void showarray(void) {
+/* 探索先表示関数 */
+void showarray() {
 	int i;
 
 	printf("探索先 :");
@@ -23,7 +23,7 @@ void showarray(void) {
 	printf("¥n");
 }
 
-/* 二分探索木の生成 -- 再帰を利用*/
+/* 木生成関数*/
 void maketree(_node *p1, int id, int num) {
 	_node *p2;
 
@@ -49,13 +49,13 @@ void maketree(_node *p1, int id, int num) {
 			p2->left = NULL;
 			p2->right = NULL;
 			p1->left = p2;
-		} else {  /* NULLでなければ左側のノードに移動 */
+		} else {
 			maketree(p1->left, id, num);
 		}
 	}
 }
 
-/* 木構造をたどって探索 */
+/* バイナリサーチ */
 int search(_node *p, int n) {
 	while (p != NULL) {
 		if (n == p->num) {
@@ -68,25 +68,22 @@ int search(_node *p, int n) {
 		}
 	}
 
-	/* ループを抜け出たということは見付からなかったということ */
 	printf("%d は見付かりませんでした。¥n", n);
-	return(-1);
+	return -1;
 }
 
-int main(void) {
+int main() {
 	_node *start, *p1;
 	int i, n;
 
-	/* 配列の値を表示 */
 	showarray();
 
-	/* 探索する値を入力 */
+	/* search number input */
 	printf("input number : ");
 	scanf("%d", &n);
 
 	printf("¥n");
 
-	/* 先頭のノードを初期化 */
 	start = malloc(sizeof(_node));
 	start->id = 0;
 	start->num = arry[0];
