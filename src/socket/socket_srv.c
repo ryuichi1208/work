@@ -9,16 +9,41 @@
 #define MSGSIZE 1024
 #define BUFSIZE (MSGSIZE + 1)
 
+//子プロセス関数
+void child_func(int clitSock) {
+	char recvBuffer[BUFSIZE];
+	int recvMsgSize, sendMsgSize;
+
+        while(1) {
+            //メッセージ受信
+            if ((recvMsgSize = recv(clitSock, recvBuffer, BUFSIZE, 0)) < 0) {
+                perror("recv() failed.");
+                exit(EXIT_FAILURE);
+            } else if(recvMsgSize == 0){
+                fprintf(stderr, "connection closed by foreign host.\n");
+                break;
+            }
+            
+            //受信したメッセージをそのままエコー
+            if((sendMsgSize = send(clitSock, recvBuffer, recvMsgSize, 0)) < 0){
+                perror("send() failed.");
+                exit(EXIT_FAILURE);
+            } else if(sendMsgSize == 0){
+                fprintf(stderr, "connection closed by foreign host.\n");
+                break;
+            }
+	}
+}
+
 int main(int argc, char* argv[]) {
 
+    int pid;
     int servSock;
     int clitSock;
     struct sockaddr_in servSockAddr;
     struct sockaddr_in clitSockAddr;
     unsigned short servPort;
     unsigned int clitLen;
-    char recvBuffer[BUFSIZE];
-    int recvMsgSize, sendMsgSize;
 
     if ( argc != 2) {
         fprintf(stderr, "argument count mismatch error.\n");
@@ -55,34 +80,34 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    //自ホストネームの取得
+    char hostname[256];
+    if (gethostname(hostname, sizeof(hostname)) != 0) {
+        puts("error");
+        return 0;
+    }
+
+    //自サーバの情報表示
+    fprintf(stdout, "PROTCOL : %d\n", servSockAddr.sin_family);
+    fprintf(stdout, "HOST    : %s\n", hostname);
+    fprintf(stdout, "PORT    : %d\n", servSockAddr.sin_port);
+
+    int fork_cnt;
     while(1) {
         clitLen = sizeof(clitSockAddr);
+	//
         if ((clitSock = accept(servSock, (struct sockaddr *) &clitSockAddr, &clitLen)) < 0) {
             perror("accept() failed.");
             exit(EXIT_FAILURE);
         }
         printf("connected from %s.\n", inet_ntoa(clitSockAddr.sin_addr));
 
-        while(1) {
-            //メッセージ受信
-            if ((recvMsgSize = recv(clitSock, recvBuffer, BUFSIZE, 0)) < 0) {
-                perror("recv() failed.");
-                exit(EXIT_FAILURE);
-            } else if(recvMsgSize == 0){
-                fprintf(stderr, "connection closed by foreign host.\n");
-                break;
-            }
-            
-            //受信したメッセージをそのままエコー
-            if((sendMsgSize = send(clitSock, recvBuffer, recvMsgSize, 0)) < 0){
-                perror("send() failed.");
-                exit(EXIT_FAILURE);
-            } else if(sendMsgSize == 0){
-                fprintf(stderr, "connection closed by foreign host.\n");
-                break;
-            }
-        }
-
+	//通信は子プロセスで実行
+	if (pid = fork() == 0) {
+		child_func(clitSock);
+	}
+	fork_cnt++;
+	fprintf(stdout,"child proc connect %d\n", fork_cnt);
         close(clitSock);
     }
 
