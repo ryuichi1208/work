@@ -81,11 +81,13 @@ static int initialize(int argc, char *argv[], bc_info_t *info, char *errmsg) {
     }
 
     memset(info, 0, sizeof(bc_info_t));
-    info->port       = atoi(argv[1]);
+    //ポート番号の妥当性判断
+    info->port = atoi(argv[1]);
 
     return(0);
 }
 
+//第一引数にポート番号を指定
 int main(int argc, char *argv[]) {
     int rc = 0;
     bc_info_t info = {0};
