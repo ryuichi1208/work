@@ -95,6 +95,7 @@ int main(int argc, char* argv[]) {
 
 	//通信は子プロセスで実行
 	if (pid = fork() == 0) {
+		close(servSock);
 		child_func(clitSock);
 	}
 	fork_cnt++;
