@@ -1,20 +1,18 @@
 #include "socket.h"
 
+//ブロードキャスト時に必要な情報を持つ構造体
 struct broadcast_info {
-    unsigned short port;     /* ポート番号 */
-
-    int sd;                  /* ソケットディスクリプタ */
-    struct sockaddr_in addr; /* ブロードキャストのアドレス構造体 */
+    unsigned short port;
+    int sd;
+    struct sockaddr_in addr;
 };
 typedef struct broadcast_info bc_info_t;
 
-#define MAXRECVSTRING 255  /* Longest string to receive */
-
+//ブロードキャストの受信
 static int broadcast_receive(bc_info_t *info, char *errmsg) {
     char recv_msg[MAXRECVSTRING+1];
     int recv_msglen = 0;
 
-    /* Receive a single datagram from the server */
     recv_msglen = recvfrom(info->sd, recv_msg, MAXRECVSTRING, 0, NULL, 0);
     if(recv_msglen < 0){
         sprintf(errmsg, "(line:%d) %s", __LINE__, strerror(errno));
@@ -22,22 +20,22 @@ static int broadcast_receive(bc_info_t *info, char *errmsg) {
     }
 
     recv_msg[recv_msglen] = '\0';
-    printf("Received: %s\n", recv_msg);    /* Print the received string */
+    printf("Received: %s\n", recv_msg);
 
     return(0);
 }
- 
+
+//ソケットの初期化
 static int socket_initialize(bc_info_t *info, char *errmsg) {
     int rc = 0;
 
-    /* ソケットの生成 : UDPを指定する */
+    //ソケットの初期化 プロトコルはUDPを指定
     info->sd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if(info->sd < 0){
         sprintf(errmsg, "(line:%d) %s", __LINE__, strerror(errno));
         return(-1);
     }
 
-    /* ブロードキャストのアドレス構造体を作成する */
     info->addr.sin_family = AF_INET;
     info->addr.sin_addr.s_addr = htonl(INADDR_ANY);
     info->addr.sin_port = htons(info->port);
