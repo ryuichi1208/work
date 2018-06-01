@@ -12,7 +12,7 @@ typedef struct _n {
 /* 配列生成:探索先の配列 */
 int arry[] = {3, 6, 2, 7, 1, 4, 8};
 
-/* 探索先表示関数 */
+/* 探索先表示関数 探索処理 */
 void showarray() {
 	int i;
 
