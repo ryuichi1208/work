@@ -4,7 +4,7 @@
 /* ノードの構造体 */
 typedef struct _n {
   int id;              /* 添字 */
-  int num;             /* 値 */
+  int num;             /* 数値 */
   struct _n *left;     /* 左 -- 自己参照 */
   struct _n *right;    /* 右 -- 自己参照 */
 } _node;
