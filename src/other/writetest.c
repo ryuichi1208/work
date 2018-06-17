@@ -8,8 +8,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "test.h"
-
 #define BLOCKSIZE (1024*1024)
 #define FILE_OUT    "fileout"
 #define FILE_MODE   0644
@@ -55,10 +53,6 @@ int write_file(off_t num_blocks, const char *filename)
 	for (block = 0; block < num_blocks; block++) {
 		int rv;
 		if (Verbosity > 2)
-			tst_resm(TINFO, "Block: %lld/%lld  (%3lld%%)\r",
-				 (long long int)block,
-				 (long long int)num_blocks,
-				 (long long int)(block * 100 / num_blocks));
 		buf_fill(buf);
 		rv = write(fd, buf, BLOCKSIZE);
 		if (rv != BLOCKSIZE) {
@@ -67,9 +61,6 @@ int write_file(off_t num_blocks, const char *filename)
 		}
 	}
 	if (Verbosity > 2)
-		tst_resm(TINFO, "Block: %lld/%lld  (%3lld%%)\r",
-			 (long long int)block, (long long int)num_blocks,
-			 (long long int)(block * 100 / num_blocks));
 	close(fd);
 	return (ret);
 }
@@ -90,11 +81,6 @@ int verify_file(off_t num_blocks, const char *filename)
 	for (block = 0; block < num_blocks; block++) {
 		int rv;
 		int n;
-		if (Verbosity > 2)
-			tst_resm(TINFO, "Block: %lld/%lld  (%3lld%%)\r",
-				 (long long int)block,
-				 (long long int)num_blocks,
-				 (long long int)(block * 100 / num_blocks));
 		buf_fill(buf_actual);
 		rv = read(fd, buf_read, BLOCKSIZE);
 		if (rv != BLOCKSIZE) {
@@ -106,22 +92,11 @@ int verify_file(off_t num_blocks, const char *filename)
 			ba = buf_actual[n] & 0xff;
 			br = buf_read[n] & 0xff;
 			if (ba != br) {
-				if (Verbosity > 2)
-					tst_resm(TINFO,
-						 "Mismatch: block=%lld +%d bytes offset=%lld read: %02xh actual: %02xh\n",
-						 (long long int)block, n,
-						 (long long
-						  int)((block * BLOCKSIZE) + n),
-						 br, ba);
 				ret++;
 			}
 		}
 	}
 	close(fd);
-	if (Verbosity > 2)
-		tst_resm(TINFO, "Block: %lld/%lld  (%3lld%%)\r",
-			 (long long int)block, (long long int)num_blocks,
-			 (long long int)(block * 100 / num_blocks));
 	return (ret);
 }
 
