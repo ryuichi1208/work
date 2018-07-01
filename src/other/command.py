@@ -3,6 +3,7 @@
 
 import argparse
 
+#パーサ生成
 parser = argparse.ArgumentParser(description='argparse sample.')
 
 #bool オプション
