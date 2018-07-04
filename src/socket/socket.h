@@ -5,6 +5,7 @@
 #include <string.h> 
 #include <unistd.h> 
 #include <errno.h>
+#include <stdbin.h>
 
 #define QUEUELIMIT 5
 #define MSGSIZE 1024
