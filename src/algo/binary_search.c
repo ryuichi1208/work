@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <errno.h>
+
 /* ノードの構造体 */
 typedef struct _n {
   int id;              /* 添字 */
@@ -10,7 +12,7 @@ typedef struct _n {
 } _node;
 
 /* 配列生成:探索先の配列 */
-int arry[] = {3, 6, 2, 7, 1, 4, 8};
+int arry[] = {3, 6, 2, 7, 1, 4, 8, 12};
 
 /* 探索先表示関数 探索処理 */
 void showarray() {
