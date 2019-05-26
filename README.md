@@ -24,14 +24,23 @@ l = [input().split() for i in range(n)]
 l = [list(map(int, input().split())) for i in range(n)]
 ```
 
-#### カウント
+#### 基本形
 
 ``` python
+# カウント/要素存在性
 L.count()
-
 if ("a" in L):
-
 if ("a" not in L):
+
+# 正規表現(複数回使用を前提として事前コンパイル)
+import re
+regex = r'ab+'
+text = "abbabbabaaabb"
+pattern = re.compile(regex)
+matchObj = pattern.match(text)
+
+# ビット演算
+
 ```
 
 #### リストソート
