@@ -51,6 +51,9 @@ l.sort()
 l.sort(key=lambda x:x[1])
 l.sort(key=lambda x:(x[1],x[2]))
 
+# 特定の要素は降順へ
+l.sort(key=lambda x:(x[0],-x[1]))
+
 # 降順
 l.sort(reverse=True)
 l.sort(key=lambda x:x[1], reverse=True)
@@ -138,4 +141,16 @@ for i in range(n):
         else: dp[i+1][j]=dp[i][j]
     print(dp[:i+2])
 print(dp[n][w])
+```
+
+#### Que/優先付きQue
+
+``` python
+import heapq
+
+# ヒープキューへ値追加
+heapq.heappush(heap, item)
+
+# ヒープキューから値取得
+heapq.heappop(heap)
 ```
