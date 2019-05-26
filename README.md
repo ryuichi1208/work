@@ -24,6 +24,16 @@ l = [input().split() for i in range(n)]
 l = [list(map(int, input().split())) for i in range(n)]
 ```
 
+#### カウント
+
+``` python
+L.count()
+
+if ("a" in L):
+
+if ("a" not in L):
+```
+
 #### リストソート
 
 ``` python
