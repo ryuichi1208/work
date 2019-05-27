@@ -118,6 +118,15 @@ def is_prime(n):
         if n % i == 0:
             return False
     return n != 1
+
+# 素数リスト取得
+def get_prime_number(num):
+    primes = set(range(2, num+1))
+    for i in range(2, int(num**0.5+1)):
+        primes.difference_update(range(i*2, num+1, i))
+    return list(primes)
+
+print(get_prime_number(100))
 ```
 
 #### 累積和/動的計画法
