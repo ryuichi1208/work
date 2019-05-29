@@ -41,6 +41,10 @@ matchObj = pattern.match(text)
 
 # ビット演算
 
+# 大文字/小文字変換
+Text="this is a pen."
+print(Text.upper())
+print(Text.lower())
 ```
 
 #### リストソート
@@ -63,6 +67,7 @@ l.sort(key=lambda x:(x[1],x[2]) reverse=True)
 #### 数学関連(基礎)
 
 ``` python
+import math
 from math import ceil,floor
 
 # 切り上げ
