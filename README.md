@@ -92,6 +92,10 @@ a, b = divmod(10, 3)
 #### 数学関連(応用)
 
 ``` python
+# 平均値
+def avg(l):
+    return sum(l)/len(l)
+
 # 最大公約数
 def gcd(a, b):
     while b:
