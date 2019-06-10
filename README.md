@@ -106,6 +106,13 @@ def gcd(a, b):
 def lcm(a, b):
     return a * b // gcd (a, b)
 
+# フィボナッチ数列
+def fib(n):
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return b
+
 # 約数の列挙
 def prime_decomposition(n):
   i = 2
@@ -171,4 +178,30 @@ heapq.heappush(heap, item)
 
 # ヒープキューから値取得
 heapq.heappop(heap)
+```
+
+#### DP
+
+``` python
+def max_sum(N,a):
+  dp=[0]*(N+1)
+  for i in range(N):
+    dp[i+1]=max(dp[i],dp[i]+a[i])
+  return dp[N]
+```
+
+#### 内包表記
+
+``` python
+# 偶数のリスト
+[i for i in range(10) if i%2==0]
+
+# 辞書内包表記
+{str(i):i for i in range(10)}
+
+# zipと連携
+label = ["kinoko", "takenoko", "suginoko"]
+feature = ["yama", "sato", "mura"]
+{i:j for i,j in zip(label,feature)}
+#>>> {'kinoko': 'yama', 'suginoko': 'mura', 'takenoko': 'sato'}
 ```
