@@ -1,13 +1,15 @@
 # Perl よく使うTips
 
-### サイト
+### 三項サイト
 
 - [perldoc.jp](https://perldoc.jp/)
 - [Perl入門ゼミ](https://tutorial.perlzemi.com/)
 - [(GitHub)[Perl/perl5]](https://github.com/Perl/perl5)
-- [(GitHub)[]]()
+- [(GitHub)[AnaTofuZ]](https://github.com/AnaTofuZ)
+- [(GitHub)[OGATA Tetsuji]](https://github.com/xtetsuji)
+- [(GitHub)[Nobutaka Wakabayashi]](https://github.com/nqounet)
 
-### 変数
+### 基礎
 
 ##### スカラ変数
 
@@ -106,4 +108,34 @@ $ref->{a};
 
 # デリファレンス
 my %hash = %$ref;
+
+# ハッシュスライス
+@age{ qw(tom mike kent nancy) } = (21,19,25,17);
+
+# ハッシュネスト
+%hash = (
+    A => { a => 1, b => 2, c => 3 },
+    B => { d => 4, e => 5, f => 6 },
+);
+
+foreach my $tmp ( keys %hash ) {
+    while ( my ($key, $val) = each %{$hash{$tmp}} ) {
+        print "$key : $val\n";
+    }
+}
+```
+
+##### ループ
+
+``` perl
+next # ループをスキップ
+last # ループを終了
+redo # ループを先頭の位置までやり直す
+```
+
+##### 三項演算子
+
+``` perl
+$age = 18;
+print $age >= 20 ? "成人\n" : "未成年\n";
 ```
