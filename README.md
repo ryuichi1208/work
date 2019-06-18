@@ -204,4 +204,7 @@ label = ["kinoko", "takenoko", "suginoko"]
 feature = ["yama", "sato", "mura"]
 {i:j for i,j in zip(label,feature)}
 #>>> {'kinoko': 'yama', 'suginoko': 'mura', 'takenoko': 'sato'}
+
+# key value 反転
+{value:key for key,value in D.items()}
 ```
