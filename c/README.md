@@ -2,7 +2,7 @@
 
 #### プリプロセッサ
 
-```
+``` c
 // ヘッダインクルード
 #include <stdio.h>
 
@@ -19,7 +19,7 @@
 
 #### ポインタ
 
-```
+``` c
 // 普通の使い方
 int val;
 int *pointer_of_val = &val;
@@ -44,7 +44,7 @@ typedef int (*MYFUNC)(int n);
 
 #### 構造体
 
-```
+``` c
 // 基本形
 typedef struct person {
 	char *name;
