@@ -208,3 +208,36 @@ feature = ["yama", "sato", "mura"]
 # key value 反転
 {value:key for key,value in D.items()}
 ```
+
+#### ディレクトリ構成
+
+##### 同じディレクトリにあるファイル
+```
+.
+├── brother.py
+└── main.py
+```
+
+```brother.py
+def hi():
+    print("Hi! I'm your brother.")
+```
+
+```main.py
+import brother
+brother.hi()
+```
+
+
+##### ひとつ下のディレクトリにある個別のファイル
+```
+.
+├── children
+│   └── tom.py
+└── main.py
+```
+
+```tom.py
+def hi():
+    print("Hi! I'm Tom.")
+```
