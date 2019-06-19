@@ -241,3 +241,11 @@ brother.hi()
 def hi():
     print("Hi! I'm Tom.")
 ```
+
+``` python
+from children import tom
+tom.hi()
+
+import children.tom
+children.tom.hi()
+```
