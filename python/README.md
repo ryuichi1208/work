@@ -253,13 +253,29 @@ children.tom.hi()
 ##### jsonの文字列だけを取り出す
 
 ``` python
-def get_str(arg):
-    result =[]
+data = [
+   "a",
+   ["b", 1, [[["c", 2], 3], 4], "d"],
+   ["e"]
+]
+
+def get_str(arg, type_instance):
+    str_res = []
+    int_res = []
     if isinstance(arg, str):
-        result.append(arg)
+        str_res.append(arg)
+    if isinstance(arg, int):
+        int_res.append(arg)
     if isinstance(arg, list):
         for item in arg:
-            res = get_str(item)
-            result += res
-   return result
+            res = get_str(item, type_instance)
+            str_res += res
+            int_res += res
+    if type_instance == "int":
+        return int_res
+    else:
+        return str_res
+
+if __name__ == "__main__":
+    print(get_str(data,"str"))
 ```
