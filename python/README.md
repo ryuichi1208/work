@@ -39,6 +39,14 @@ text = "abbabbabaaabb"
 pattern = re.compile(regex)
 matchObj = pattern.match(text)
 
+# lisnの各項へ操作
+map(lambda x: x**2, L)
+
+def add(x):
+    return x + 2
+
+map(add, [1,2,3,4])
+
 # ビット演算
 
 # 大文字/小文字変換
