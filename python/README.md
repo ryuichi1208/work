@@ -249,3 +249,17 @@ tom.hi()
 import children.tom
 children.tom.hi()
 ```
+
+##### jsonの文字列だけを取り出す
+
+``` python
+def get_str(arg):
+    result =[]
+    if isinstance(arg, str):
+        result.append(arg)
+    if isinstance(arg, list):
+        for item in arg:
+            res = get_str(item)
+            result += res
+   return result
+```
