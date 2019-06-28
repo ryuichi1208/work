@@ -1,3 +1,4 @@
+``` pthon
 # 引数の肩を指定、戻り値はint
 def is_int(s : str) -> int:
     try:
@@ -19,3 +20,4 @@ print('right : {:>10}'.format(100))
 # left  : 100
 # center:    100
 # right :        100
+```
