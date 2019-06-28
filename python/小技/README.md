@@ -1,4 +1,4 @@
-``` pthon
+``` python
 # 引数の肩を指定、戻り値はint
 def is_int(s : str) -> int:
     try:
