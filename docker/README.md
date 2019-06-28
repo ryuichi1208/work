@@ -1,121 +1,292 @@
-## Dockerとは
+index.docker.ioから指定したイメージを取り込む
 
-#### 概要
-
-コンテナ型の仮想環境を作成、配布、実行するためのプラットフォーム。
-Dockerは、Linuxのコンテナ技術を使っている(namespace, cgroups, overlayfsなど)
-dotCloud社（現Docker社）が開発
-
-#### 用語
-
-- Docker Engine
-  - Dockerを利用するための常駐プログラム
--  イメージ(Image)
-  - コンテナ(=アプリケーションの実行環境)を起動するのに必要な設定ファイルをまとめたもの
-- コンテナ
-  - イメージからコンテナを起動する
-
-###### docker run オプション
-
-``` bash
-docker run [オプション] イメージ[:タグ|@ダイジェスト値] [コマンド] [引数...]
-
-# コンテナ名を指定
-docker run --name "test" centos
-
-# バックグランド実行
-docker run -d centos
-
-# コンソールに結果を出力
-docker run -it --name "test" centos /bin/cal
-
-# ポートフォワーディング
-docker run -d -p 8080:80 httpd
-
-# ホスト名とIPを指定
-docker run -it --add-host=test.com:192.168.1.1 centos
-
-# DNSサーバを指定
-docker run --dns=192.168.1.1 httpd
-
-# ボリュームマウント
-docker run -v $(pwd):/var/www/html httpd
-
-# 環境変数を指定
-docker run -it -e foo=bar centos /bin/bash
-
-# WORKDIR指定
-docker run -it -w=/tmp/work centos /bin/bash
+```bash
+docker pull REPOSITORY[:TAG]
+docker image pull REPOSITORY[:TAG]
 ```
 
-###### 稼働中のコンテナ操作
+イメージ一覧を得る
 
-``` bash
-# コンテナ一覧
-docker ps [オプション]
-
-# コンテナのステータスを表示
-docker stats コンテナID
-
-# コンテナ起動
-docker start コンテナID
-
-# コンテナ停止
-docker stop コンテナID
-
-# コンテナ再起動
-docker restart コンテナID
-
-# コンテナ削除
-docker rm コンテナID
-
-# コンテナ一括削除
-docker rm $(docker ps -a -q)
-
-# 古いコンテナを一括削除
-docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs docker rm
-
-# イメージの一括削除
-docker rmi $(docker images -a -q)
-```
-
-###### ローカルにあるDockerイメージを確認したい
-
-``` bash
-docker images [オプション名] [リポジトリ名]
-
-# ローカル環境のDockerイメージの一覧表示
+```bash
 docker images
-# ローカル環境のDockerイメージのダイジェスト表示
-docker images --digests asashiho/dockersample
+docker image list
 ```
 
-###### イメージをDockerHubからダウンロード
+イメージからコンテナを起動する
 
-``` bash
-docker pull [オプション] イメージ名[:タグ名]
-
-# CentOSのDockerイメージ取得
-docker pull centos:7
-# CentOSのすべてのタグのDockerイメージ取得
-docker pull -a centos
-# 取得先URLを指定してCentOSのDockerイメージ取得
-docker pull registry.hub.docker.com/centos:7
+```bash
+docker run -itd IMAGE
+docker container run -itd IMAGE
 ```
 
-###### イメージの詳細情報を取得
+イメージからコンテナを起動して、接続する。コンテナに名前をつける
 
-``` bash
-docker inspect [オプション] コンテナ識別子またはイメージ識別子 [コンテナ識別子またはイメージ識別子]
+```bash
+docker run -it IMAGE bash
+docker container run -it IMAGE bash
 
-# Dockerイメージの詳細表示
-docker inspect centos
-# OS情報の取得
-docker inspect --format="{{.Os}}" centos
+docker run -it --name NAME IMAGE bash
+docker container run -it --name NAME IMAGE bash
 ```
 
-###### Dockerfileからイメージを作成
+ホストの/var/wwwを、コンテナ内の/var/htmlからアクセスできるように共有する
 
-``` bash
-docker build -t [イメージ名]:[タグ名] [Dockerfileのあるディレクトリパス]
+```bash
+docker run -it -v /var/www:/var/html IMAGE bash
+docker container run -it -v /var/www:/var/html IMAGE bash
+```
+
+ホスト8080番portへの通信をコンテナ80番portへ転送する
+
+```bash
+docker run -it -p 8080:80 IMAGE bash
+docker container run -it -p 8080:80 IMAGE bash
+```
+ゲストのPRIVATE_PORTに指定したPortがホストのどのPortにポートフォワードしてるかを調べる
+
+```bash
+docker port CONTAINER
+docker container port CONTAINER
+
+docker port CONTAINER PRIVATE_PORT
+docker container port CONTAINER PRIVATE_PORT
+```
+
+イメージからコンテナを作る
+
+```bash
+docker create IMAGE
+docker container create IMAGE
+
+
+docker create IMAGE
+docker container create --name NAME IMAGE
+```
+
+コンテナを起動する
+
+```bash
+docker start CONTAINER
+docker container start CONTAINER
+```
+
+コンテナを停止する
+
+```bash
+docker stop CONTAINER
+docker container stop CONTAINER
+```
+
+コンテナを再起動する
+
+```bash
+docker restart CONTAINER
+docker container restart CONTAINER
+```
+
+コンテナを削除する
+
+
+```bash
+docker rm CONTAINER [CONTAINER...]
+docker CONTAINER rm CONTAINER [CONTAINER...]
+```
+
+コンテナをすべて削除する
+
+```bash
+docker rm $(docker ps -aq)
+```
+
+イメージを削除する
+
+```bash
+docker rmi IMAGE [IMAGE...]
+```
+
+タグなしのイメージをすべて削除する
+
+```bash
+docker rmi $(docker images | grep '<none>' | awk '{print$3}')
+```
+
+起動しているコンテナに接続する
+
+```bash
+# exitするとコンテナが終了してしまう
+# コンテナを終了せずに抜ける「Ctrl + p, Ctrl + q」
+docker attach CONTAINER
+
+# exitしてもコンテナは終了しない
+docker exec -it CONTAINER /bin/bash
+```
+
+リポジトリにタグを貼る（:TAGを省略すると、latestになる）
+
+```bash
+docker tag IMAGE REPOSITORY[:TAG]
+```
+
+./にあるDockerfileをビルドして、イメージを作成する
+
+```bash
+docker build  ./
+docker build -t REPOSITORY[:TAG] ./
+```
+
+ビルドを最初からやりなおす
+
+```bash
+docker build --no-cache .
+```
+
+起動中のコンテナ一覧を得る
+
+```bash
+docker ps
+docker container list
+```
+
+指定したコンテナ名にマッチした一覧を得る
+
+```bash
+docker container list -f "Name=<container_name>"
+docker container list -f "Name=<container_name_prefix>*"
+```
+
+停止中のコンテナも含めすべての一覧を得る
+
+```bash
+docker ps -a
+docker container list -a
+```
+
+コンテナのハッシュリストを得る
+
+```bash
+docker ps -aq
+docker container list -aq
+```
+
+コンテナのサイズを得る
+
+```bash
+docker ps -s
+docker container list -s
+```
+
+hub.docker.comからイメージを検索する
+
+```bash
+docker search TERM
+```
+
+イメージをビルドした際のコマンドリストを得る。Dockerfileに記述したもののみ
+
+```bash
+docker history IMAGE
+```
+
+イメージをファイル出力する
+
+```bash
+docker save IMAGE > filename.tar
+```
+
+ファイルをイメージとして取り込む
+
+```bash
+docker load < filename.tar
+```
+
+コンテナをファイル出力する
+
+```bash
+docker export CONTAINER > filename.tar
+```
+
+コンテナからイメージを作成する
+
+```bash
+docker commit CONTAINER REPOSITORY[:TAG]
+```
+
+URLを指定してイメージを取り込む
+
+```bash
+docker import url REPOSITORY[:TAG]
+```
+
+ファイルからイメージを取り込む
+
+```bash
+cat filename.tar | docker import - REPOSITORY[:TAG]
+```
+
+コンテナの標準出力を見る
+
+```bash
+docker logs CONTAINER
+```
+
+コンテナ内のファイルをホストにコピーする
+
+```bash
+docker cp CONTAINER:filename ./
+```
+
+イメージがコンテナ化されてから変更されたファイル差分を得る
+
+```bash
+docker diff CONTAINER
+```
+
+URLのファイルをイメージ内のPATHに生成する
+
+```bash
+docker insert IMAGE URL PATH
+```
+
+コンテナの実行中のプロセス一覧を見る
+
+```bash
+docker top CONTAINER
+```
+
+dockerの現在インストールしているバージョンと最新のバージョンを得る
+
+```bash
+docker version
+```
+
+コンテナ内のイベントを監視する（コンテナが作られた、起動した、停止したなど)
+
+```bash
+docker events
+```
+
+コンテナの詳細な情報を得る。formatオプションで情報の絞り込みができる
+
+```bash
+docker inspect CONTAINER
+docker inspect CONTAINER --format '{{ json . }}'
+```
+
+コンテナ内でコマンドを実行する
+
+```bash
+docker exec CONTAINER コマンド
+docker exec CONTAINER bash -c "コマンド"
+```
+
+イメージ、コンテナ、ボリュームで消費しているファイルサイズを確認する
+
+```bash
+docker system df --verbose | grep -B -1 'Build cache usage'
+```
+
+CPU使用率、メモリ使用量などを確認する
+
+```bash
+docker stats
 ```
