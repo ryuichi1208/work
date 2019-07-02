@@ -287,3 +287,11 @@ def get_str(arg, type_instance):
 if __name__ == "__main__":
     print(get_str(data,"str"))
 ```
+
+##### Labda
+
+``` python
+# 配列の各項を2乗
+l = [i for i in range(10)]
+print(list(map(lambda x :x**2,l)))
+```
