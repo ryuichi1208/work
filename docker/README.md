@@ -1,3 +1,61 @@
+## DockerHub
+
+https://hub.docker.com/
+
+## Docker ファイル
+
+##### コマンド群
+
+```
+FROM
+LABEL
+RUN
+EXPOSE
+ENV
+VOLUME
+USER
+WORKDIR
+ONBUILD
+
+COPY  # ホストのファイルをコンテナ内へコピー
+ADD   # tar展開などを同時に行いたいとき
+
+CMD        # 「docker run」で実際のコマンドを何も指定しなかったとき 実行するコマンド(と引数)のデフォルト値
+           # ENTRYPOINTがある場合はENTRYPOINTの引数として動作する
+ENTRYPOINT # 固定の主たるプロセスを起動する
+```
+
+##### マルチステージビルド
+
+```
+FROM golang:1.11-alpine AS build
+
+#プロジェクトに必要なツールをインストール
+# 依存関係を更新するには、 `docker build --no-cache .`  を実行
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+# Gopkg.toml と Gopkg.lock はプロジェクトの依存関係一覧
+# Gopkg ファイルが更新された時のみ、これらのレイヤを再構築する
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# ライブラリの依存関係をインストール
+RUN dep ensure -vendor-only
+
+# プロジェクト全体をコピーし、構築
+# プロジェクトのディレクトリ内にあるファイルが更新すると、このレイヤは再構築
+COPY . /go/src/project/
+RUN go build -o /bin/project
+
+# 最終的に１つのイメージ・レイヤになる
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT ["/bin/project"]
+CMD ["--help"]
+```
+
+## DOcker コマンド Tips
+
 index.docker.ioから指定したイメージを取り込む
 
 ```bash
