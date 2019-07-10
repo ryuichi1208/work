@@ -157,9 +157,18 @@ print(get_prime_number(100))
 
 ``` python
 # 累積和
-a=list(range(1,30))
-a2=[0]
-for i in a:a2.append(a2[-1]+i)
+L = [1, 4, 5, 9, 2, 3]
+s = [0]
+
+for i,a in enumerate(L):
+    s.append(s[i]+a)
+
+ans = 0
+for i in range(len(L)-2):
+    ans = max(ans, s[i+2]-s[i])
+
+print(s)
+print(ans)
 
 #DP1
 n=6
