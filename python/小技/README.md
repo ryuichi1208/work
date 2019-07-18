@@ -1,7 +1,7 @@
 ##### 小技集
 
 ``` python
-# 引数の肩を指定、戻り値はint
+# 引数の型を指定、戻り値はint
 def is_int(s : str) -> int:
     try:
         num = int(s)
@@ -42,4 +42,37 @@ for name, age in zip(names, ages):
 # Alice 24
 # Bob 50
 # Charlie 18
+```
+
+#### バイトコードを読む
+
+``` python
+import dis
+
+def func1(a: int, b: str):
+    print(f'{a:10}')
+    print(sum(20, 30))
+
+dis.dis(func1)
+```
+
+#### 読み方
+
+```
+  5           0 LOAD_GLOBAL              0 (print)
+              2 LOAD_FAST                0 (a)
+              4 LOAD_CONST               1 ('10')
+              6 FORMAT_VALUE             4 (with format)
+              8 CALL_FUNCTION            1
+             10 POP_TOP
+
+  6          12 LOAD_GLOBAL              0 (print)
+             14 LOAD_GLOBAL              1 (sum)
+             16 LOAD_CONST               2 (20)
+             18 LOAD_CONST               3 (30)
+             20 CALL_FUNCTION            2
+             22 CALL_FUNCTION            1
+             24 POP_TOP
+             26 LOAD_CONST               0 (None)
+             28 RETURN_VALUE
 ```
