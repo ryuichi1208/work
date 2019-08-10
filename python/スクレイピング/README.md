@@ -52,5 +52,9 @@ requests.get('http://ci.nii.ac.jp/ncid/BB08796640.json').json()
 # クラスを指定して特定のタグ要素を全て取得
 soup.find_all("ul", attrs={"class", "list-main-news"})
 
-# 
+# タグ内の特定の要素を取得する
+soup.find("ul").get("href")
+
+# id配下の特定の要素の値を取得する
+soup.find('div', attrs={'id': 'section'}).h2.a.get("title")
 ```
