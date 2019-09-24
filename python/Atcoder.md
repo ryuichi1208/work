@@ -317,3 +317,20 @@ def func(n1, n2, n3, *n4):
 L = [1,2,3,4,5]
 func(*L)
 ```
+
+##### 累積和(簡易版)
+
+``` python
+from itertools import *
+
+L = [110, 20, 30, 40, 250, 20, 40, 90, 20, 10, 1110]
+K = list(accumulate(L))
+K.insert(0, 0)
+
+ans = 0
+for i in range(len(K)-3):
+    if ans < K[i+3] - K[i]:
+        ans = K[i+3] - K[i]
+
+print(ans)
+```
