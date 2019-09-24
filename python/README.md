@@ -226,25 +226,6 @@ feature = ["yama", "sato", "mura"]
 {value:key for key,value in D.items()}
 ```
 
-#### ディレクトリ構成
-
-##### 同じディレクトリにあるファイル
-```
-.
-├── brother.py
-└── main.py
-```
-
-```brother.py
-def hi():
-    print("Hi! I'm your brother.")
-```
-
-```main.py
-import brother
-brother.hi()
-```
-
 ##### jsonの文字列だけを取り出す
 
 ``` python
@@ -315,7 +296,7 @@ print(ans)
 
 ## 過去問
 
-[141](https://atcoder.jp/contests/abc141/tasks)
+* [141](https://atcoder.jp/contests/abc141/tasks)
 
 ``` python
 # A
@@ -347,13 +328,13 @@ for i in range(m):
 print(-sum(q))
 ```
 
-[140]()
+* [140](https://atcoder.jp/contests/abc140/tasks)
 
 ``` python
-# A
+### A
 print(int(input())**3)
 
-# B
+### B
 H=int(input())
 S = [list(map(int, input().split())) for i in range(3)]
 ans=sum(S[1])
@@ -362,7 +343,7 @@ for i in range(H-1):
     ans+=S[2][S[0][i]-1]
 print(ans)  
 
-# C
+### C
 N = int(input())
 B = list(map(int, input().split()))
  
@@ -371,7 +352,7 @@ for i in range(0,N-2):
   ans += min(B[i],B[i+1])
 print(ans)
 
-# D
+### D
 N, K = map(int, input().split())
 S = input()
 print(min(sum([1 for i in range(1, N) if S[i] == S[i-1]]) + K*2, N-1))
