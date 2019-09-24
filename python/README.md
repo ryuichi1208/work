@@ -1,4 +1,4 @@
-## python　よく使うTips
+## AtCoderで使えるTips
 
 #### 入力処理
 
@@ -245,28 +245,6 @@ import brother
 brother.hi()
 ```
 
-
-##### ひとつ下のディレクトリにある個別のファイル
-```
-.
-├── children
-│   └── tom.py
-└── main.py
-```
-
-```tom.py
-def hi():
-    print("Hi! I'm Tom.")
-```
-
-``` python
-from children import tom
-tom.hi()
-
-import children.tom
-children.tom.hi()
-```
-
 ##### jsonの文字列だけを取り出す
 
 ``` python
@@ -333,4 +311,68 @@ for i in range(len(K)-3):
         ans = K[i+3] - K[i]
 
 print(ans)
+```
+
+## 過去問
+
+[141](https://atcoder.jp/contests/abc141/tasks)
+
+``` python
+# A
+l='Rainy CloudySunny ';print(l[l.find(input())-6:][:6])
+
+# B
+S = input()
+if 'L' not in S[::2] and 'R' not in S[1::2]:
+    print('Yes')
+else:
+    print('No')
+
+# C
+n,k,q = list(map(int,input().split()))
+t = [0]*n
+for i in range(q):
+    t[int(input())-1] += 1
+ 
+print(*["Yes" if k + i - q > 0 else "No" for i in t],sep="\n")
+
+# D
+from heapq import*
+n,m=map(int,input().split())
+q=[]
+[heappush(q,-int(i)) for i in input().split()]
+for i in range(m):
+  x=-heappop(q)//2
+  heappush(q,-x)
+print(-sum(q))
+```
+
+[140]()
+
+``` python
+# A
+print(int(input())**3)
+
+# B
+H=int(input())
+S = [list(map(int, input().split())) for i in range(3)]
+ans=sum(S[1])
+for i in range(H-1):
+  if (S[0][i+1]-S[0][i])==1:
+    ans+=S[2][S[0][i]-1]
+print(ans)  
+
+# C
+N = int(input())
+B = list(map(int, input().split()))
+ 
+ans = B[0] + B[N-2]
+for i in range(0,N-2):
+  ans += min(B[i],B[i+1])
+print(ans)
+
+# D
+N, K = map(int, input().split())
+S = input()
+print(min(sum([1 for i in range(1, N) if S[i] == S[i-1]]) + K*2, N-1))
 ```
