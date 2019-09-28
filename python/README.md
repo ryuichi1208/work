@@ -1,5 +1,19 @@
 ## AtCoderで使えるTips
 
+#### ベースファイル
+
+``` python
+#!/usr/local/bin/python3
+
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from bisect import bisect_left, bisect_right
+import sys
+import random
+import itertools
+import math
+```
+
 #### 入力処理
 
 ``` python
