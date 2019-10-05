@@ -11,7 +11,7 @@ L = [i if i % 2 == 0 else i**2 for i in range(10)]
 ##### LRUキャッシュ使用
 
 ``` python
-@lru_cacheを使うと同じ引数での関数呼び出しがキャッシュを読む
+# @lru_cacheを使うと同じ引数での関数呼び出しがキャッシュを読む
 
 @lru_cache(maxsize=None)
 def calc_add(x, y):
@@ -29,8 +29,8 @@ def iterate(number):
 
 ##### マルチプロセス
 
-```
- def _sleep(n: int) -> int:
+``` python
+def _sleep(n: int) -> int:
      time.sleep(n)
      return n
 
