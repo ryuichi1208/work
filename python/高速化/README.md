@@ -26,3 +26,19 @@ def iterate(number):
     for i in range(number):
         yield i * 2
 ```
+
+##### マルチプロセス
+
+```
+ def _sleep(n: int) -> int:
+     time.sleep(n)
+     return n
+
+
+def _current_calcuration(cores: int):
+     numbers = [1, 2, 3, 4]
+     with concurrent.futures.ProcessPoolExecutor(max_workers=cores) as executor:
+         results = executor.map(_sleep, numbers)
+         for result in results:
+             print(result,datetime.datetime.now())
+```
