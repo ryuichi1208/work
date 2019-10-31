@@ -384,3 +384,46 @@ N, K = map(int, input().split())
 S = input()
 print(min(sum([1 for i in range(1, N) if S[i] == S[i-1]]) + K*2, N-1))
 ```
+
+## deque
+
+```
+import string, sys
+from benchmarker import Benchmarker
+from collections import Counter
+from random import Random
+ 
+n = int(sys.argv[1]) if len(sys.argv) > 1 else 1000*1000
+ 
+with Benchmarker(n, width=20) as bench:
+ 
+    ix = [ i for i in xrange(n) ]
+    r = Random()
+    r.shuffle(ix)
+ 
+    chs = list(string.ascii_letters)
+    ws = []
+    for i in ix:
+        m = i % 52
+        ws.append( chs[m] )
+ 
+    @bench("dict")
+    def _(bm):
+        dt = dict()
+        for i in bm:
+            key = ws[i]
+            v = dt.setdefault( key, 0 )
+            dt[key] += 1
+ 
+    @bench("Counter1")
+    def _(bm):
+        dt = Counter()
+        for i in bm:
+            key = ws[i]
+            dt[key] += 1
+ 
+    @bench("Counter2")
+    def _(bm):
+        dt = Counter( ws )
+
+```
