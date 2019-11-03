@@ -1,20 +1,23 @@
-## AtCoderで使えるTips
+## Python Tips
 
-#### ベースファイル
+### スニペット
 
 ``` python
-#!/usr/local/bin/python3
-
 from collections import defaultdict, deque
 from heapq import heappush, heappop
 from bisect import bisect_left, bisect_right
+from fractions import gcd
+
 import sys
 import random
 import itertools
 import math
+sys.setrecursionlimit(10**6)
 ```
 
-#### 入力処理
+### 基本
+
+#### 入力系
 
 ``` python
 # 1行1列
@@ -38,38 +41,7 @@ l = [input().split() for i in range(n)]
 l = [list(map(int, input().split())) for i in range(n)]
 ```
 
-#### 基本形
-
-``` python
-# カウント/要素存在性
-L.count()
-if ("a" in L):
-if ("a" not in L):
-
-# 正規表現(複数回使用を前提として事前コンパイル)
-import re
-regex = r'ab+'
-text = "abbabbabaaabb"
-pattern = re.compile(regex)
-matchObj = pattern.match(text)
-
-# lisnの各項へ操作
-map(lambda x: x**2, L)
-
-def add(x):
-    return x + 2
-
-map(add, [1,2,3,4])
-
-# ビット演算
-
-# 大文字/小文字変換
-Text="this is a pen."
-print(Text.upper())
-print(Text.lower())
-```
-
-#### リストソート
+#### ソート系
 
 ``` python
 # 昇順
@@ -86,344 +58,146 @@ l.sort(key=lambda x:x[1], reverse=True)
 l.sort(key=lambda x:(x[1],x[2]) reverse=True)
 ```
 
-#### 数学関連(基礎)
+#### 最大/最小値
 
 ``` python
-import math
-from math import ceil,floor
-
-# 切り上げ
-math.ceil(num)
-
-# 切り捨て
-math.floor(num)
-
-# 絶対値
-abs(num)
-
-# 最大値/最小値
-max(l)
+# 多次元配列のキーを指定した最大/最小値
 max(l, key=lambda x:x[1])
-min(l)
 max(l, key=lambda x:x[1])
 
-# 整数の商と余りを同時取得
-a, b = divmod(10, 3)
+# 辞書(キーの最大値)
+max(k)
 
-# 約数列挙
-def make_divisors(n):
-    """
-    素数の場合は[1,n]
-    """
-    divisors = []
-    for i in range(1, int(n**0.5)+1):
-        if n % i == 0:
-            divisors.append(i)
-            if i != n // i:
-                divisors.append(n//i)
-    return divisors
+# 辞書(値の最大値)
+max(k.values())
+
+# 値が最大値となるときのキーと値を同時に取得
+max_kv = max(d.items(), key=lambda x: x[1])
 ```
 
-#### 数学関連(応用)
+#### ライブラリ
 
 ``` python
-# 平均値
-def avg(l):
-    return sum(l)/len(l)
+# 優先度付きキュー
+## 最小値（最大値）をO(logN)で取り出す
 
-# 最大公約数
-def gcd(a, b):
-    while b:
-        a, b = b, a % b
-    return a
+## キャスト
+heapq.heapify(リスト)
 
-# 最小公倍数
-def lcm(a, b):
-    return a * b // gcd (a, b)
+## 最小値取り出し
+heapq.heappop(優先度付きキュー)
 
-# フィボナッチ数列
-def fib(n):
-    a, b = 0, 1
-    for i in range(n):
-        a, b = b, a + b
-    return b
+## キューへ要素を挿入
+heapq.heappush(優先度付きキュー)
 
-# 約数の列挙
+## 最大値を取り出す際は全ての要素へ「-1」をかける
+list(map(lambda x: x*(-1), a))
+
+# キュー/スタック/デック
+# 両端操作がO(1)で可能
+
+```
+
+### 数学系
+
+#### 基本形
+
+``` python
+# 切り上げ/切り捨て
+math.ceil(num)
+math.floor(num)
+
+
+# 逆関数(角度算出)
+math.degrees(math.asin(1))
+math.degrees(math.acos(1))
+math.degrees(math.atan(1))
+
+
+# 
+
+
+# 最大公約数(gcd)
+gcd(x, y)
+
+
+# 最小公倍数(lcm)
+(x * y) // gcd(x, y)
+
+
+# リストの最小公倍数 -> int
+def lcm(lst):
+    from fractions import gcd
+    x = a[0]
+    for i in range(1, len(a)-1):
+        x = (x * a[i]) // gcd(x, a[i])
+    return x
+
+
+# 約数のリストを生成 -> list
+def make_divisors(n):
+    div = []
+    for i in range(1, int(n**0.5)+1):
+        if n % i == 0:
+            div.append(i)
+            if i != n // i:
+                div.append(n//i)
+    return div
+
+
+# 素因数分解のリスト -> list
 def prime_decomposition(n):
-  i = 2
-  table = []
-  while i * i <= n:
-    while n % i == 0:
-      n /= i
-      table.append(i)
-    i += 1
-  if n > 1:
-    table.append(n)
-  return table
+    i = 2 ; table = []
+    while i * i <= n:
+        while n % i == 0:
+            n //= i ; table.append(i)
+        i += 1
+    if n > 1:
+      table.append(n)
+    return table
 
-# 素因数分解
+
+# 素数判定 -> boolean
 def is_prime(n):
     for i in range(2, n + 1):
         if i * i > n:
             break
         if n % i == 0:
             return False
-    return n != 1
+        return n != 1
 
-# 素数リスト取得
+
+# フィボナッチ数列 -> list
+def fib(n):
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return b
+
+
+# 素数のリストを取得 -> list
 def get_prime_number(num):
     primes = set(range(2, num+1))
     for i in range(2, int(num**0.5+1)):
         primes.difference_update(range(i*2, num+1, i))
     return list(primes)
-
-print(get_prime_number(100))
 ```
 
-#### 累積和/動的計画法
+#### 順列/組み合わせ
 
 ``` python
+# 順列(Permutation):重複選択有
+list(itertools.permutations(seq, 3))
+
+
+# 組み合わせ(Combinations)
+list(itertools.combinations(seq,3))
+
+
 # 累積和
-L = [1, 4, 5, 9, 2, 3]
-s = [0]
+list(itertools.accumulate(l))
 
-for i,a in enumerate(L):
-    s.append(s[i]+a)
 
-ans = 0
-for i in range(len(L)-2):
-    ans = max(ans, s[i+2]-s[i])
-
-print(s)
-print(ans)
-
-#DP1
-n=6
-w=8
-weight=[2,1,3,2,1,5]
-value=[3,2,6,1,3,85]
-
-dp=[[0 for i in range(w+1)] for j in range(n+1)]
-for i in range(n):
-    for j in range(w+1):
-        if j>=weight[i] : dp[i+1][j]=max(dp[i][j-weight[i]]+value[i],dp[i][j])
-        else: dp[i+1][j]=dp[i][j]
-    print(dp[:i+2])
-print(dp[n][w])
-```
-
-#### Que/優先付きQue
-
-``` python
-import heapq
-
-# ヒープキューへ値追加
-heapq.heappush(heap, item)
-
-# ヒープキューから値取得
-heapq.heappop(heap)
-```
-
-#### DP
-
-``` python
-def max_sum(N,a):
-  dp=[0]*(N+1)
-  for i in range(N):
-    dp[i+1]=max(dp[i],dp[i]+a[i])
-  return dp[N]
-```
-
-#### 内包表記
-
-``` python
-# 偶数のリスト
-[i for i in range(10) if i%2==0]
-
-# 辞書内包表記
-{str(i):i for i in range(10)}
-
-# zipと連携
-label = ["kinoko", "takenoko", "suginoko"]
-feature = ["yama", "sato", "mura"]
-{i:j for i,j in zip(label,feature)}
-#>>> {'kinoko': 'yama', 'suginoko': 'mura', 'takenoko': 'sato'}
-
-# key value 反転
-{value:key for key,value in D.items()}
-```
-
-##### jsonの文字列だけを取り出す
-
-``` python
-data = [
-   "a",
-   ["b", 1, [[["c", 2], 3], 4], "d"],
-   ["e"]
-]
-
-def get_str(arg, type_instance):
-    str_res = []
-    int_res = []
-    if isinstance(arg, str):
-        str_res.append(arg)
-    if isinstance(arg, int):
-        int_res.append(arg)
-    if isinstance(arg, list):
-        for item in arg:
-            res = get_str(item, type_instance)
-            str_res += res
-            int_res += res
-    if type_instance == "int":
-        return int_res
-    else:
-        return str_res
-
-if __name__ == "__main__":
-    print(get_str(data,"str"))
-```
-
-##### Labda
-
-``` python
-# 配列の各項を2乗
-l = [i for i in range(10)]
-print(list(map(lambda x :x**2,l)))
-```
-
-##### アスタリスク
-
-``` python
-# 「*」を使った呼び出し
-# 「*」を使用して関数を呼び出すと変数がアンパックして呼び出される
-# 関数定義として使用すると以降は可変長引数として受け取りタプルとして
-def func(n1, n2, n3, *n4):
-    print(n1, n3, n4) #=> 1 3 (4, 5)
-
-L = [1,2,3,4,5]
-func(*L)
-```
-
-##### 累積和(簡易版)
-
-``` python
-from itertools import *
-
-L = [110, 20, 30, 40, 250, 20, 40, 90, 20, 10, 1110]
-K = list(accumulate(L))
-K.insert(0, 0)
-
-ans = 0
-for i in range(len(K)-3):
-    if ans < K[i+3] - K[i]:
-        ans = K[i+3] - K[i]
-
-print(ans)
-```
-
-## 過去問
-
-* [141](https://atcoder.jp/contests/abc141/tasks)
-
-``` python
-# A
-l='Rainy CloudySunny ';print(l[l.find(input())-6:][:6])
-
-# B
-S = input()
-if 'L' not in S[::2] and 'R' not in S[1::2]:
-    print('Yes')
-else:
-    print('No')
-
-# C
-n,k,q = list(map(int,input().split()))
-t = [0]*n
-for i in range(q):
-    t[int(input())-1] += 1
- 
-print(*["Yes" if k + i - q > 0 else "No" for i in t],sep="\n")
-
-# D
-from heapq import*
-n,m=map(int,input().split())
-q=[]
-[heappush(q,-int(i)) for i in input().split()]
-for i in range(m):
-  x=-heappop(q)//2
-  heappush(q,-x)
-print(-sum(q))
-```
-
-* [140](https://atcoder.jp/contests/abc140/tasks)
-
-``` python
-### A
-print(int(input())**3)
-
-### B
-H=int(input())
-S = [list(map(int, input().split())) for i in range(3)]
-ans=sum(S[1])
-for i in range(H-1):
-  if (S[0][i+1]-S[0][i])==1:
-    ans+=S[2][S[0][i]-1]
-print(ans)  
-
-### C
-N = int(input())
-B = list(map(int, input().split()))
- 
-ans = B[0] + B[N-2]
-for i in range(0,N-2):
-  ans += min(B[i],B[i+1])
-print(ans)
-
-### D
-N, K = map(int, input().split())
-S = input()
-print(min(sum([1 for i in range(1, N) if S[i] == S[i-1]]) + K*2, N-1))
-```
-
-## deque
-
-```
-import string, sys
-from benchmarker import Benchmarker
-from collections import Counter
-from random import Random
- 
-n = int(sys.argv[1]) if len(sys.argv) > 1 else 1000*1000
- 
-with Benchmarker(n, width=20) as bench:
- 
-    ix = [ i for i in xrange(n) ]
-    r = Random()
-    r.shuffle(ix)
- 
-    chs = list(string.ascii_letters)
-    ws = []
-    for i in ix:
-        m = i % 52
-        ws.append( chs[m] )
- 
-    @bench("dict")
-    def _(bm):
-        dt = dict()
-        for i in bm:
-            key = ws[i]
-            v = dt.setdefault( key, 0 )
-            dt[key] += 1
- 
-    @bench("Counter1")
-    def _(bm):
-        dt = Counter()
-        for i in bm:
-            key = ws[i]
-            dt[key] += 1
- 
-    @bench("Counter2")
-    def _(bm):
-        dt = Counter( ws )
-
+# 累積和(積)
+list(itertools.accumulate(l), operator.mul)
 ```
