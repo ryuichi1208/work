@@ -107,23 +107,16 @@ list(map(lambda x: x*(-1), a))
 math.ceil(num)
 math.floor(num)
 
-
 # 逆関数(角度算出)
 math.degrees(math.asin(1))
 math.degrees(math.acos(1))
 math.degrees(math.atan(1))
 
-
-# 
-
-
 # 最大公約数(gcd)
 gcd(x, y)
 
-
 # 最小公倍数(lcm)
 (x * y) // gcd(x, y)
-
 
 # リストの最小公倍数 -> int
 def lcm(lst):
@@ -132,7 +125,6 @@ def lcm(lst):
     for i in range(1, len(a)-1):
         x = (x * a[i]) // gcd(x, a[i])
     return x
-
 
 # 約数のリストを生成 -> list
 def make_divisors(n):
@@ -205,14 +197,18 @@ list(itertools.accumulate(l), operator.mul)
 
 #### DP
 
-```
-# 任意の個数の最大話
+``` python
+# 任意の個数の最大
 def max_sum(N,a):
   dp=[0]*(N+1)
   for i in range(N):
     dp[i+1]=max(dp[i],dp[i]+a[i])
   return dp[N]
 
-# 任意の個数の
-
+# 任意の個数の最小
+def min_sum(N,a):
+  dp=[0]*(N+1)
+  for i in range(N):
+    dp[i+1]=min(dp[i],dp[i]+a[i])
+  return dp[N]
  ```
