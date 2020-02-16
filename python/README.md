@@ -201,3 +201,18 @@ list(itertools.accumulate(l))
 # 累積和(積)
 list(itertools.accumulate(l), operator.mul)
 ```
+
+
+#### DP
+
+```
+# 任意の個数の最大話
+def max_sum(N,a):
+  dp=[0]*(N+1)
+  for i in range(N):
+    dp[i+1]=max(dp[i],dp[i]+a[i])
+  return dp[N]
+
+# 任意の個数の
+
+ ```
